@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { PageTransition } from "@/components/providers/page-transition";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   EMPTY_RESUME,
   loadResume,
@@ -128,7 +129,8 @@ export default function BuilderPage() {
   }
 
   return (
-    <div className="shell grid gap-6 py-10 lg:grid-cols-[minmax(0,1fr)_380px] builder-form">
+    <PageTransition>
+      <div className="shell grid gap-6 py-10 lg:grid-cols-[minmax(0,1fr)_380px] builder-form">
       {/* FORM */}
       <div className="space-y-5 builder-form-col">
         <div>
@@ -266,5 +268,6 @@ export default function BuilderPage() {
         </div>
       </aside>
     </div>
+    </PageTransition>
   );
 }

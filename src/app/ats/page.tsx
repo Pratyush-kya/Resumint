@@ -1,5 +1,6 @@
 "use client";
 
+import { PageTransition } from "@/components/providers/page-transition";
 import { useRef, useState } from "react";
 import {
   AlertCircle,
@@ -146,7 +147,8 @@ export default function AtsPage() {
     : [];
 
   return (
-    <div className="shell grid gap-6 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.9fr)]">
+    <PageTransition>
+      <div className="shell grid gap-6 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.9fr)]">
       <div className="space-y-5">
         <div>
           <span className="eyebrow">ATS checker</span>
@@ -339,6 +341,7 @@ export default function AtsPage() {
         ) : null}
       </aside>
     </div>
+    </PageTransition>
   );
 }
 

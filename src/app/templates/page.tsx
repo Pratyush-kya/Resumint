@@ -1,5 +1,10 @@
+import { PageTransition } from "@/components/providers/page-transition";
 import { TemplatePicker } from "@/components/tools/template-picker";
 
 export default function TemplatesPage() {
-  return <TemplatePicker />;
+  return (
+    <PageTransition>
+      <TemplatePicker />
+    </PageTransition>
+  );
 }

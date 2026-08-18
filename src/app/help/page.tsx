@@ -1,3 +1,5 @@
+import { PageTransition } from "@/components/providers/page-transition";
+
 const faqs = [
   ["Where is my résumé stored?", "Builder drafts stay in this browser. ATS file uploads are processed in memory for one analysis request and are not saved by the application."],
   ["How do I download a PDF?", "Open the Builder, fill your details, then choose Print / save PDF. Select Save as PDF in your browser's print window."],
@@ -8,20 +10,22 @@ const faqs = [
 
 export default function HelpPage() {
   return (
-    <section className="shell py-12 md:py-16">
-      <div className="max-w-2xl">
-        <span className="eyebrow">Help</span>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">Questions, answered plainly.</h1>
-        <p className="mt-3 text-[var(--muted)]">Everything you need to build, check, and export your résumé.</p>
-      </div>
-      <div className="mt-10 max-w-3xl space-y-3">
-        {faqs.map(([question, answer]) => (
-          <details key={question} className="faq-item premium-card group p-5">
-            <summary className="cursor-pointer list-none pr-8 font-semibold">{question}</summary>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)]">{answer}</p>
-          </details>
-        ))}
-      </div>
-    </section>
+    <PageTransition>
+      <section className="shell py-12 md:py-16">
+        <div className="max-w-2xl">
+          <span className="eyebrow">Help</span>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">Questions, answered plainly.</h1>
+          <p className="mt-3 text-[var(--muted)]">Everything you need to build, check, and export your résumé.</p>
+        </div>
+        <div className="mt-10 max-w-3xl space-y-3">
+          {faqs.map(([question, answer]) => (
+            <details key={question} className="faq-item premium-card group p-5">
+              <summary className="cursor-pointer list-none pr-8 font-semibold">{question}</summary>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)]">{answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    </PageTransition>
   );
 }

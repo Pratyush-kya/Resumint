@@ -130,6 +130,146 @@ a {
   box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 80%, transparent);
 }
 
+/* ---- Page transitions (React ViewTransition, Next 16) ---- */
+/* Let clicks pass through the transition snapshot so the new page is usable. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Anchor the persistent header so it never slides with page content. */
+.site-header {
+  view-transition-name: site-header;
+}
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* Directional slide for forward / back navigation */
+::view-transition-old(.nav-forward) {
+  --slide-offset: -60px;
+  animation:
+    150ms ease-in both vt-fade reverse,
+    400ms ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-forward) {
+  --slide-offset: 60px;
+  animation:
+    210ms ease-out 150ms both vt-fade,
+    400ms ease-in-out both vt-slide;
+}
+::view-transition-old(.nav-back) {
+  --slide-offset: 60px;
+  animation:
+    150ms ease-in both vt-fade reverse,
+    400ms ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-back) {
+  --slide-offset: -60px;
+  animation:
+    210ms ease-out 150ms both vt-fade,
+    400ms ease-in-out both vt-slide;
+}
+
+/* Soft crossfade for untyped navigations (browser back / forward) */
+::view-transition-old(.page-fade) {
+  animation: 280ms ease both vt-fade-out;
+}
+::view-transition-new(.page-fade) {
+  animation: 340ms ease 120ms both vt-fade-in;
+}
+
+@keyframes vt-slide {
+  from { translate: var(--slide-offset); }
+  to { translate: 0; }
+}
+@keyframes vt-fade {
+  from { opacity: 0; filter: blur(3px); }
+  to { opacity: 1; filter: blur(0); }
+}
+@keyframes vt-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes vt-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Smooth-scroll overlay: glowing right-edge rail + live % ---- */
+.scroll-overlay {
+  position: fixed;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.scroll-overlay[data-active="true"] {
+  opacity: 1;
+}
+.scroll-overlay-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 8px;
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+}
+.scroll-overlay-track {
+  position: relative;
+  width: 8px;
+  height: 46vh;
+  max-height: 420px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: inset 0 0 12px rgba(2, 3, 12, 0.35);
+}
+.scroll-overlay-fill {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 0%;
+  background: var(--accent-grad);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 70%, transparent);
+  border-radius: 999px;
+  transition: height 0.08s linear;
+}
+.scroll-overlay-thumb {
+  position: absolute;
+  left: 50%;
+  top: 0%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  margin-top: -7px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent-2) 90%, transparent);
+  transition: top 0.08s linear;
+}
+@media (max-width: 768px) {
+  .scroll-overlay { display: none; }
+}
+
 .nav-glass {
   background: color-mix(in srgb, var(--bg) 74%, transparent);
   box-shadow: 0 8px 32px rgba(2, 3, 12, 0.12);

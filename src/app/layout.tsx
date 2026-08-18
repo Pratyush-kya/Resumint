@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
+import { ScrollOverlay } from "@/components/layout/scroll-overlay";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <div className="ambient-backdrop" aria-hidden />
           <ScrollProgress />
+          <ScrollOverlay />
           <Nav />
           <main className="relative z-10">{children}</main>
           <Footer />

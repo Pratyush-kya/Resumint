@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { setLenis } from "@/lib/lenis";
 
 export function LenisProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -14,6 +15,10 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
       smoothWheel: true,
     });
 
+    // Share the instance with non-provider UI (e.g. the scroll overlay's
+    // click-to-seek) so everything scrolls on the same smooth engine.
+    setLenis(lenis);
+
     let rafId = 0;
     function raf(time: number) {
       lenis.raf(time);
@@ -24,6 +29,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
+      setLenis(null);
     };
   }, []);
 
