@@ -1,0 +1,888 @@
+@import "tailwindcss";
+
+/* ---- Design tokens: dark-first, indigo/violet premium ---- */
+:root {
+  --bg: #080912;
+  --bg-soft: #0f1120;
+  --surface: #141624;
+  --surface-glass: rgba(20, 22, 36, 0.72);
+  --border: rgba(255, 255, 255, 0.1);
+  --text: #f7f7fb;
+  --muted: #a6a8bd;
+  --accent: #8b6cff;
+  --accent-2: #34d7e9;
+  --success: #5ce1a6;
+  --success-soft: rgba(92, 225, 166, 0.12);
+  --accent-grad: linear-gradient(105deg, #8065ff 0%, #b45cff 48%, #34d7e9 100%);
+  --grid-line: rgba(255, 255, 255, 0.035);
+  --bg-image-overlay: linear-gradient(180deg, rgba(8, 9, 18, 0.16) 0%, rgba(8, 9, 18, 0.42) 58%, rgba(8, 9, 18, 0.94) 100%);
+}
+
+:root.light {
+  --bg: #f5f5fb;
+  --bg-soft: #fbfbff;
+  --surface: #ffffff;
+  --surface-glass: rgba(255, 255, 255, 0.76);
+  --border: rgba(24, 20, 62, 0.11);
+  --text: #161522;
+  --muted: #606176;
+  --accent: #694cff;
+  --accent-2: #078fa4;
+  --success: #12865b;
+  --success-soft: rgba(18, 134, 91, 0.1);
+  --accent-grad: linear-gradient(105deg, #694cff 0%, #9e43e8 48%, #078fa4 100%);
+  --grid-line: rgba(47, 40, 90, 0.055);
+  --bg-image-overlay: linear-gradient(180deg, rgba(245, 245, 251, 0.68) 0%, rgba(245, 245, 251, 0.82) 58%, rgba(245, 245, 251, 0.98) 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: clip;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 38%, transparent);
+  color: var(--text);
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Eyebrow section labels */
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gradient-text {
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.shell {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---- Fixed site atmosphere: grid, aurora and slow-moving depth ---- */
+.ambient-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background-color: var(--bg);
+  background-image:
+    var(--bg-image-overlay),
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    url("/ats-aurora-background.webp");
+  background-position: center, center, center, center top;
+  background-repeat: no-repeat, repeat, repeat, no-repeat;
+  background-size: auto, 56px 56px, 56px 56px, cover;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%);
+}
+
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  height: 3px;
+  transform-origin: 0 50%;
+  background: var(--accent-grad);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 80%, transparent);
+}
+
+.nav-glass {
+  background: color-mix(in srgb, var(--bg) 74%, transparent);
+  box-shadow: 0 8px 32px rgba(2, 3, 12, 0.12);
+}
+
+.glass-chip {
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 50px rgba(4, 5, 18, 0.22);
+  backdrop-filter: blur(16px);
+}
+
+.primary-cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.primary-cta::after {
+  content: "";
+  position: absolute;
+  inset: -60% auto -60% -35%;
+  width: 28%;
+  transform: rotate(20deg);
+  background: rgba(255, 255, 255, 0.55);
+  filter: blur(4px);
+  transition: left 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.primary-cta:hover::after {
+  left: 118%;
+}
+
+/* ---- Premium card system: glass, animated edge and gentle lift ---- */
+.premium-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), transparent 42%),
+    var(--surface-glass);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 18px 55px rgba(2, 3, 12, 0.16);
+  backdrop-filter: blur(8px);
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease,
+    box-shadow 0.45s ease;
+}
+
+.premium-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 3;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from 180deg at 50% 50%, transparent 0deg, transparent 245deg, var(--accent) 292deg, var(--accent-2) 326deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.premium-card::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: -45%;
+  left: -65%;
+  width: 55%;
+  height: 190%;
+  transform: rotate(22deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.premium-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.premium-card:hover {
+  transform: translateY(-7px);
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 26px 70px rgba(2, 3, 12, 0.26),
+    0 0 38px color-mix(in srgb, var(--accent) 11%, transparent);
+}
+
+.premium-card:hover::before {
+  opacity: 1;
+}
+
+.premium-card:hover::after {
+  left: 125%;
+}
+
+.card-icon {
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, var(--bg-soft));
+  box-shadow: inset 0 0 20px color-mix(in srgb, var(--accent) 8%, transparent);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.group:hover .card-icon {
+  transform: rotate(-5deg) scale(1.09);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.interactive-icon:hover {
+  transform: translateY(-2px) rotate(6deg);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 17%, transparent);
+}
+
+.hero-workspace {
+  border-radius: 1.35rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 35px 100px rgba(2, 3, 14, 0.32),
+    0 0 80px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.hero-workspace:hover {
+  transform: translateY(-3px);
+}
+
+/* The résumé "paper" is styled fully by the rules further down
+   (search "Résumé sheet") so it stays white + ATS-safe on screen and print. */
+
+.score-panel {
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border));
+  background:
+    radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 45%),
+    color-mix(in srgb, var(--bg-soft) 86%, transparent);
+}
+
+.score-ring {
+  background: conic-gradient(var(--accent-2) 0deg, var(--accent) 331deg, color-mix(in srgb, var(--border) 72%, transparent) 331deg);
+  box-shadow: 0 0 35px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.status-dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: var(--success);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 45%, transparent);
+  animation: status-pulse 2s ease-out infinite;
+}
+
+/* ---- Functional tools ---- */
+.form-field {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  outline: none;
+  background: color-mix(in srgb, var(--bg-soft) 86%, transparent);
+  color: var(--text);
+  padding: 0.78rem 0.9rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 450;
+  line-height: 1.55;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: color-mix(in srgb, var(--accent) 72%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: color-mix(in srgb, var(--muted) 70%, transparent);
+}
+
+.tool-button {
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 0.72rem 1.1rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+button.tool-button {
+  display: inline-flex;
+}
+
+.tool-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.tool-button-primary {
+  background: var(--accent-grad);
+  color: white;
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.tool-button-secondary {
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  color: var(--text);
+}
+
+.tool-button-secondary:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--accent) 62%, var(--border));
+}
+
+.resume-preview {
+  min-height: 780px;
+  border-radius: 0.35rem;
+  background: #ffffff;
+  color: #1b1c24;
+  padding: clamp(2rem, 5vw, 4.2rem);
+  box-shadow: 0 28px 90px rgba(1, 2, 10, 0.36);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.resume-preview header {
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid #5b4be8;
+}
+
+.resume-preview header h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.resume-preview header p {
+  margin-top: 0.55rem;
+  color: #5b4be8;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.resume-preview header div {
+  margin-top: 0.65rem;
+  color: #5f6270;
+  font-size: 0.76rem;
+}
+
+.resume-preview section {
+  margin-top: 1.65rem;
+}
+
+.resume-preview section h3 {
+  margin-bottom: 0.65rem;
+  color: #5b4be8;
+  font-size: 0.73rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.resume-preview section p {
+  color: #3e414c;
+  font-size: 0.79rem;
+  line-height: 1.68;
+}
+
+.resume-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.resume-skills span {
+  border-radius: 999px;
+  background: #f0efff;
+  color: #4337b4;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.resume-preview.template-classic header,
+.resume-preview.template-classic section h3 {
+  border-color: #222222;
+  color: #222222;
+}
+
+.resume-preview.template-classic header p {
+  color: #444444;
+}
+
+.resume-preview.template-classic .resume-skills span {
+  background: #f0f0f0;
+  color: #222222;
+}
+
+.resume-preview.template-compact {
+  min-height: 700px;
+  padding: clamp(1.7rem, 4vw, 3.25rem);
+}
+
+.resume-preview.template-compact header,
+.resume-preview.template-compact section h3 {
+  border-color: #087f8c;
+  color: #087f8c;
+}
+
+.resume-preview.template-compact header p {
+  color: #087f8c;
+}
+
+.resume-preview.template-compact section {
+  margin-top: 1.15rem;
+}
+
+.resume-preview.template-compact .resume-skills span {
+  background: #e9f6f7;
+  color: #086873;
+}
+
+.keyword-chip {
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.keyword-match {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.template-card {
+  width: 100%;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.template-selected {
+  border-color: color-mix(in srgb, var(--accent) 72%, var(--border));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 16%, transparent), 0 24px 60px rgba(2, 3, 12, 0.24);
+}
+
+.template-paper {
+  height: 280px;
+  border-radius: 0.35rem;
+  background: #ffffff;
+  padding: 2rem 1.7rem;
+  box-shadow: 0 14px 35px rgba(2, 3, 12, 0.25);
+}
+
+.template-name-line {
+  height: 0.65rem;
+  width: 58%;
+  border-radius: 99px;
+  background: #222630;
+}
+
+.template-role-line {
+  margin-top: 0.55rem;
+  height: 0.32rem;
+  width: 38%;
+  border-radius: 99px;
+  background: var(--template-accent);
+}
+
+.template-row {
+  margin-top: 1.55rem;
+  padding-top: 0.65rem;
+  border-top: 2px solid var(--template-accent);
+}
+
+.template-row span {
+  display: block;
+  height: 0.3rem;
+  border-radius: 99px;
+  background: #c7c9d0;
+}
+
+.template-row span + span {
+  margin-top: 0.42rem;
+  width: 78%;
+  background: #dedfe4;
+}
+
+.faq-item summary {
+  position: relative;
+}
+
+.faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: -0.15rem;
+  color: var(--accent);
+  font-size: 1.35rem;
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+}
+
+@keyframes status-pulse {
+  65%, 100% { box-shadow: 0 0 0 7px transparent; }
+}
+
+/* ---- Vivid mode: click the square box to switch the whole site vivid ---- */
+:root.vivid {
+  --bg: #0a0014;
+  --bg-soft: #16002e;
+  --surface: #1f0540;
+  --border: rgba(190, 130, 255, 0.28);
+  --text: #ffffff;
+  --muted: #d6c2ff;
+  --accent: #c44dff;
+  --accent-2: #00f0ff;
+  --success: #5cffc5;
+  --success-soft: rgba(92, 255, 197, 0.13);
+  --accent-grad: linear-gradient(100deg, #ff2eea 0%, #9b4dff 45%, #00f0ff 100%);
+}
+
+:root.vivid .ambient-backdrop {
+  background-color: #0a0014;
+  background-image:
+    linear-gradient(180deg, rgba(10, 0, 20, 0.05), rgba(10, 0, 20, 0.5) 68%, rgba(10, 0, 20, 0.96)),
+    url("/ats-aurora-background.webp");
+  background-position: center, center top;
+  background-repeat: no-repeat;
+  background-size: auto, cover;
+  animation: vivid-image-bloom 1.2s ease-out 1 forwards;
+}
+
+@keyframes vivid-image-bloom {
+  0% { filter: saturate(0.75) brightness(0.76); }
+  100% { filter: saturate(1.3) brightness(1.04); }
+}
+
+/* ---- VibeBox: hover -> inside glows, then a light travels around the edge ---- */
+.vibe-ring {
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 14px;
+  padding: 2px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--accent) 70deg,
+    var(--accent-2) 130deg,
+    transparent 200deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: vibe-spin 2.4s linear infinite;
+  pointer-events: none;
+}
+.group:hover .vibe-ring {
+  opacity: 1;
+}
+@keyframes vibe-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---- Hover color-text: normal at rest, animated color sweep on hover ---- */
+.hover-color {
+  color: var(--text);
+  transition: color 0.3s ease;
+}
+.hover-color:hover {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: hover-sweep 1.2s linear infinite;
+}
+@keyframes hover-sweep {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* =================== Résumé sheet: live preview + PDF =================== */
+/* Three recruiter-friendly looks (Modern / Classic / Compact) driven by CSS
+   custom properties. Sans-serif, single column, no graphics — ATS-safe. */
+.resume-sheet {
+  --r-accent: #14548a;
+  --r-accent-2: #c0532b;
+  --r-ink: #16232e;
+  --r-muted: #4b5862;
+  --r-rule: #c4ccd2;
+  --r-font: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --r-gap: 9pt;
+
+  font-family: var(--r-font);
+  font-size: 10.3pt;
+  line-height: 1.45;
+  color: var(--r-ink);
+  background: #fff;
+  width: 100%;
+  max-width: 820px;
+  margin-inline: auto;
+  padding: 18pt 20pt;
+  border: 1px solid var(--r-rule);
+  border-radius: 0.4rem;
+  box-shadow: 0 18px 60px rgba(2, 3, 12, 0.22);
+}
+.resume-sheet.t-classic {
+  --r-accent: #1f1f1f;
+  --r-accent-2: #1f1f1f;
+  --r-muted: #3a3a3a;
+  --r-rule: #c9c9c9;
+}
+.resume-sheet.t-compact {
+  --r-accent: #0d7a86;
+  --r-accent-2: #0d7a86;
+  --r-gap: 6pt;
+  font-size: 9.7pt;
+  padding: 13pt 16pt;
+}
+
+.resume-head {
+  border-bottom: 2.4pt solid var(--r-accent);
+  padding-bottom: 6pt;
+  margin-bottom: var(--r-gap);
+}
+.resume-sheet h1 {
+  font-size: 23pt;
+  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: 0.3pt;
+  margin: 0;
+}
+.resume-sub {
+  font-size: 11.5pt;
+  font-weight: 700;
+  letter-spacing: 0.6pt;
+  text-transform: uppercase;
+  color: var(--r-accent);
+  margin-top: 3pt;
+}
+.resume-contact {
+  margin-top: 5pt;
+  font-size: 9pt;
+  color: var(--r-muted);
+}
+.resume-contact .r-sep {
+  margin: 0 8pt;
+  color: var(--r-rule);
+}
+.resume-sec {
+  margin-top: var(--r-gap);
+  break-inside: avoid;
+}
+.resume-sheet h2 {
+  font-size: 10.5pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.4pt;
+  color: var(--r-accent);
+  border-bottom: 0.9pt solid var(--r-rule);
+  margin: 0 0 4pt;
+  padding-bottom: 2pt;
+}
+.resume-item {
+  margin-bottom: 6pt;
+  break-inside: avoid;
+}
+.resume-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8pt;
+  align-items: baseline;
+}
+.resume-strong {
+  font-weight: 700;
+  font-size: 10.5pt;
+}
+.resume-muted {
+  color: var(--r-muted);
+  font-size: 9.4pt;
+}
+.resume-sheet ul {
+  margin: 3pt 0 0;
+  padding-left: 14pt;
+  list-style: none;
+}
+.resume-sheet ul li {
+  position: relative;
+  margin: 1.8pt 0;
+}
+.resume-sheet ul li::before {
+  content: "\25B8";
+  position: absolute;
+  left: -13pt;
+  color: var(--r-accent-2);
+  font-weight: 700;
+}
+.resume-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5pt;
+}
+.resume-skills span {
+  background: color-mix(in srgb, var(--r-accent) 10%, #fff);
+  color: var(--r-accent);
+  border: 0.7pt solid color-mix(in srgb, var(--r-accent) 25%, #fff);
+  border-radius: 3pt;
+  padding: 1.5pt 6pt;
+  font-size: 8.8pt;
+  font-weight: 600;
+}
+
+/* ---- Print / PDF: only the résumé sheet prints, UI chrome hidden ---- */
+@media print {
+  @page {
+    size: A4;
+    /* Keep this margin small so Chromium does not inject its title, URL,
+       date, or built-in footer. The résumé supplies its own inner spacing. */
+    margin: 6mm;
+
+    @bottom-center {
+      content: counter(page) " of " counter(pages);
+      color: #4b5862;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 8pt;
+    }
+  }
+  html,
+  body,
+  main {
+    background: #fff !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .ambient-backdrop,
+  .scroll-progress {
+    display: none !important;
+  }
+  /* Hide the form column and UI controls. The résumé sheet lives inside
+     .resume-paper-inner — do NOT hide that; only hide the "Live preview" label. */
+  .site-header,
+  footer,
+  .ambient-backdrop,
+  .scroll-progress,
+  .builder-form > .builder-form-col,
+  .builder-form .no-print,
+  .resume-paper-wrap > :first-child {
+    display: none !important;
+  }
+  /* Unwrap the preview card so the sheet fills the printable page. */
+  .builder-form {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    grid-template-columns: none !important;
+  }
+  .resume-paper-wrap {
+    display: block !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+  .resume-sheet {
+    position: static !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    /* Together with the 6mm page margin, this preserves the visual inset
+       without leaving room for Chromium's automatic print metadata. */
+    padding: 8mm 10mm 10mm !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    font-size: 9.8pt;
+    line-height: 1.34;
+  }
+  .resume-head {
+    margin-bottom: 8pt;
+    padding-bottom: 5pt;
+  }
+  .resume-sheet h1 {
+    font-size: 21pt;
+  }
+  .resume-sub {
+    font-size: 10.5pt;
+  }
+  .resume-sec {
+    margin-top: 7pt;
+  }
+  .resume-item {
+    margin-bottom: 5pt;
+  }
+  .resume-skills span {
+    padding: 1pt 5pt;
+  }
+}
+
+/* Reduced motion: kill non-essential animation */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .ambient-backdrop {
+    background-size: auto, 38px 38px, 38px 38px, cover;
+  }
+
+  .premium-card:hover {
+    transform: translateY(-3px);
+  }
+}
